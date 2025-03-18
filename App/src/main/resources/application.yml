@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+app:
+  users:
+    userLogin: user
+    userPassword: 1
+
+    adminLogin: admin
+    adminPassword: 1
+
+  url: http://localhost:8080/
+
+
+spring:
+  application:
+    name: test
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/h2_schema.sql
+      data-locations: classpath:sql/h2_data.sql
+
+  data:
+    rest:
+      base-path: /api
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8089/oauth2/jwks

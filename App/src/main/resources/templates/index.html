@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Целебные травы</title>
+    <link rel="stylesheet" href="/styles/style.css"/>
+
+    <script>
+        function setDefaultValues() {
+            document.getElementById('name').value = 'Дмитрий';
+            document.getElementById('email').value = 'example@example.com';
+            document.getElementById('city').value = 'Рязань';
+            document.getElementById('quantity').value = '12';
+            document.getElementById('herb').value = 'Ромашка';
+
+            const today = new Date();
+            today.setDate(today.getDate() + 1);
+            document.getElementById('deliveryDate').value = today.toISOString().split('T')[0];
+        }
+
+        window.onload = setDefaultValues;
+    </script>
+
+    <style>
+        .userBox span {
+            margin-right: 10px;
+        }
+
+        .top-bar-refs * {
+            margin-right: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="top-bar">
+        <div class="top-bar-refs">
+            <a href="/orders">Заказы</a>
+            <a href="/my_orders">Мои заказы</a>
+        </div>
+
+        <div class="userBox">
+            <div sec:authorize="!isAuthenticated()">
+                <a href="/login">Войти</a>
+            </div>
+
+            <div sec:authorize="isAuthenticated()">
+                <span th:text="${#authentication.name}"></span>
+                <a href="/logout">Выйти</a>
+            </div>
+        </div>
+
+    </div>
+
+    <header>
+        <h1>Целебные травы</h1>
+        <p>Узнайте о полезных свойствах трав и их применении в народной медицине</p>
+    </header>
+
+    <main id="mainContainer">
+
+        <section class="herb" th:each="herb : ${herbs}">
+            <img th:src="@{/images{image}(image=${herb.imagePath})}" th:alt="${herb.name}"/>
+            <h2 th:text="${herb.name}"></h2>
+            <p><strong>Полезные свойства:</strong> <span th:text="${herb.features}"></span> </p>
+            <p><strong>Применение:</strong> <span th:text="${herb.usage}"></span> </p>
+            <p><strong>Осталось на складе:</strong> <span th:text="${herb.remains}"></span> </p>
+        </section>
+
+    </main>
+
+    <div sec:authorize="isAuthenticated()" class="blockCreateOrder">
+        <h2>Оформить заказ</h2>
+        <form th:object="${order}" action="/submitOrder" method="post">
+            <label for="name">Имя:</label>
+            <input type="text" th:field="*{consumerName}" id="name" value="Ваш текст по умолчанию">
+            <span class="validationError"
+                  th:if="${#fields.hasErrors('consumerName')}"
+                  th:errors="*{consumerName}"></span><br>
+
+            <label for="email">Почта:</label>
+            <input type="text" th:field="*{consumerEmail}" id="email">
+            <span class="validationError"
+                  th:each="err, stat : ${#fields.errors('consumerEmail')}"
+                  th:if="${#fields.hasErrors('consumerEmail') && stat.index == 0}"
+                  th:text="${err}"></span><br>
+
+            <label for="city">Город доставки:</label>
+            <input type="text" th:field="*{city}" id="city">
+            <span class="validationError"
+                  th:if="${#fields.hasErrors('city')}"
+                  th:errors="*{city}"></span><br>
+
+            <label for="herb">Выберите тип травы:</label>
+            <select th:field="*{herb}" id="herb">
+                <option value="Ромашка">Ромашка</option>
+                <option value="Зверобой">Зверобой</option>
+                <option value="Мята">Мята</option>
+            </select>
+            <span class="validationError"
+                  th:if="${#fields.hasErrors('herb')}"
+                  th:errors="*{herb}"></span><br>
+
+            <label for="quantity">Количество:</label>
+            <input type="number" th:field="*{quantity}" id="quantity">
+            <span class="validationError"
+                  th:each="err, stat : ${#fields.errors('quantity')}"
+                  th:if="${#fields.hasErrors('quantity') && stat.index == 0}"
+                  th:text="${err}"></span><br>
+
+            <label for="deliveryDate">Дата доставки:</label>
+            <input type="date" th:field="*{deliveryDate}" id="deliveryDate">
+            <span class="validationError"
+                  th:if="${#fields.hasErrors('deliveryDate')}"
+                  th:errors="*{deliveryDate}"></span><br>
+
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <button type="submit">Оформить заказ</button>
+        </form>
+
+    </div>
+
+</body>
+</html>

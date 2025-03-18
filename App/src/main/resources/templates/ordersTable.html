@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Таблица заказов трав</title>
+    <link rel="stylesheet" th:href="@{/styles/style.css}" />
+    <style></style>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #dddddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr {
+            cursor: pointer; /* Указатель, чтобы показать, что строка кликабельна */
+        }
+
+        tr:hover {
+            background-color: #e0e0e0; /* Цвет фона строки при наведении */
+        }
+
+        a {
+            text-decoration: none; /* Убираем подчеркивание */
+            color: inherit; /* Цвет текста у ссылок будет таким же, как у обычного текста */
+        }
+    </style>
+    <script>
+        function linkToOrder(element) {
+            const orderId = element.dataset.orderId
+
+            window.location.href = "/orders/" + orderId;
+        }
+    </script>
+</head>
+<body>
+
+    <div class="top-bar">
+        <a href="/">Главная</a>
+
+        <div class="userBox">
+            <div></div>
+
+            <div sec:authorize="isAuthenticated()">
+                <span th:text="${#authentication.name}"></span>
+                <a href="/logout">Выйти</a>
+            </div>
+        </div>
+    </div>
+
+    <h1>Заказы лечебных трав</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>ID покупателя</th>
+            <th>Имя покупателя</th>
+            <th>Email</th>
+            <th>Город</th>
+            <th>Лечебная трава</th>
+            <th>Количество</th>
+            <th>Дата доставки</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}"
+            th:data-order-id="${order.id}"
+            onclick="linkToOrder(this)">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.consumerId}"></td>
+            <td th:text="${order.consumerName}"></td>
+            <td th:text="${order.consumerEmail}"></td>
+            <td th:text="${order.city}"></td>
+            <td th:text="${order.herb}"></td>
+            <td th:text="${order.quantity}"></td>
+            <td th:text="${order.deliveryDate}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    </body>
+</html>

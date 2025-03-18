@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали заказа</title>
+    <style>
+        .order-details {
+            border: 1px solid #dddddd;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: auto;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            text-align: center;
+        }
+        .detail {
+            margin-bottom: 10px;
+        }
+        .label {
+            font-weight: bold;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 20px;
+            background-color: #007bff; /* Цвет фона кнопки */
+            color: white; /* Цвет текста кнопки */
+            text-decoration: none; /* Убираем подчеркивание */
+            border-radius: 5px; /* Скругленные углы */
+            transition: background-color 0.3s; /* Плавный переход цвета */
+        }
+        .back-button:hover {
+            background-color: #0056b3; /* Цвет фона при наведении */
+        }
+    </style>
+</head>
+<body>
+
+<div class="order-details">
+    <h2>Детали заказа</h2>
+    <div class="detail">
+        <span class="label">ID:</span> <span th:text="${order.id}"></span>
+    </div>
+    <div class="detail">
+        <span class="label">Имя покупателя:</span> <span th:text="${order.consumerName}"></span>
+    </div>
+    <div class="detail">
+        <span class="label">Email:</span> <span th:text="${order.consumerEmail}"></span>
+    </div>
+    <div class="detail">
+        <span class="label">Город:</span> <span th:text="${order.city}"></span>
+    </div>
+    <div class="detail">
+        <span class="label">Лечебная трава:</span> <span th:text="${order.herb}"></span>
+    </div>
+    <div class="detail">
+        <span class="label">Количество:</span> <span th:text="${order.quantity}"></span>
+    </div>
+    <div class="detail">
+        <span class="label">Дата доставки:</span> <span th:text="${order.deliveryDate}"></span>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <a class="back-button" th:href="@{/orders}">&#8592; Назад к заказам</a>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_USER')">
+        <a class="back-button" th:href="@{/my_orders}">&#8592; Назад к заказам</a>
+    </div>
+
+</div>
+
+</body>
+</html>

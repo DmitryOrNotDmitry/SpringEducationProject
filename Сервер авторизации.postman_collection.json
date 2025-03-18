@@ -1,0 +1,161 @@
+{
+	"info": {
+		"_postman_id": "a36881ce-5605-406d-a750-cb722a878f00",
+		"name": "Сервер авторизации",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40213447"
+	},
+	"item": [
+		{
+			"name": "Получение кода (браузер)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8089/oauth2/authorize?response_type=code&client_id=my-client&scope=read write&redirect_uri=http://localhost:8079/login/oauth2/code/my-client",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"oauth2",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "response_type",
+							"value": "code"
+						},
+						{
+							"key": "client_id",
+							"value": "my-client"
+						},
+						{
+							"key": "scope",
+							"value": "read write"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://localhost:8079/login/oauth2/code/my-client"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение токена (AUTHORIZATION_CODE )",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic bXktY2xpZW50Om15LXNlY3JldA==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "GthrgwDuOYQImPJd6bz2xf_PfPNFkCGwChZFWbLCoi7wAkfqHfPabDacBWJNq-Dbef8p3w-ZjhOvBeaSUrGQqRjnbnMa-nu1f1z_CQ6WzajCQ68SvVV7x5NkpRNJ8Y-D",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://localhost:8079/login/oauth2/code/my-client",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8089/oauth2/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение токена (CLIENT_CREDENTIALS )",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "1",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic bXktY2xpZW50Om15LXNlY3JldA==",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "my-client",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "my-secret",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://localhost:8079/login/oauth2/code/my-client",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8089/oauth2/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
